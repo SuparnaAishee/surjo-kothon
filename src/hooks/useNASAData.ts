@@ -7,6 +7,13 @@ export interface CMEData {
   speed?: number
   sourceLocation?: string
   link?: string
+  cmeAnalyses?: Array<{
+    speed?: number
+    latitude?: number
+    longitude?: number
+    halfAngle?: number
+    isMostAccurate?: boolean
+  }>
 }
 
 export interface APODData {
@@ -72,7 +79,26 @@ export function useNASAData() {
       const response = await fetch(url)
       if (!response.ok) throw new Error('NASA DONKI request failed')
 
-      const data: CMEData[] = await response.json()
+      const rawData: any[] = await response.json()
+
+      // Map the nested API structure to our interface
+      const data: CMEData[] = rawData.map(item => {
+        // Extract speed from cmeAnalyses array (prefer isMostAccurate analysis)
+        let speed: number | undefined
+        if (item.cmeAnalyses && item.cmeAnalyses.length > 0) {
+          const accurateAnalysis = item.cmeAnalyses.find((a: any) => a.isMostAccurate)
+          const analysis = accurateAnalysis || item.cmeAnalyses[0]
+          speed = analysis.speed
+        }
+
+        return {
+          startTime: item.startTime,
+          speed,
+          sourceLocation: item.sourceLocation,
+          link: item.link,
+          cmeAnalyses: item.cmeAnalyses
+        }
+      })
 
       setState(prev => ({
         ...prev,
