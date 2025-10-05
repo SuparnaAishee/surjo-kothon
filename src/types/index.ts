@@ -1,0 +1,1 @@
+export type PageType = 'home' | 'character' | 'mode-select' | 'story' | 'interactive' | 'game' | 'game-solar-dodge' | 'game-planet-shield' | 'game-aurora-collect' | 'game-satellite-save' | 'game-space-quiz' | 'quiz' | 'results' | 'ending'

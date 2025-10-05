@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🌞 Stellar Stories: Sunny's Space Adventure</title>
+  <meta name="description" content="Learn about space weather through stories and fun! Interactive educational experience with real NASA data." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#0B132B; --bg2:#1F1D36; --bg3:#2A1B3D; --card:#12172b; --text:#f7f8ff;
+      --primary:#FFD166; --secondary:#06D6A0; --accent:#118AB2; --danger:#EF476F;
+      --muted:#8aa0b5; --shadow:0 15px 40px rgba(0,0,0,.4); --glow:0 0 20px;
+      --radius:20px; --aurora-green:#06D6A0; --solar-orange:#FF9F40;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text); font:17px/1.6 'Poppins', system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255,209,102,.08) 0%, transparent 50%),
+        radial-gradient(circle at 85% 25%, rgba(6,214,160,.06) 0%, transparent 50%),
+        radial-gradient(circle at 50% 80%, rgba(17,138,178,.05) 0%, transparent 60%),
+        linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg3) 100%);
+      min-height:100vh; overflow-x:hidden; position:relative;
+    }
+    body::before{
+      content:''; position:fixed; top:0; left:0; right:0; bottom:0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="%23fff" opacity="0.3"/><circle cx="80" cy="30" r="0.5" fill="%23ffd166" opacity="0.4"/><circle cx="60" cy="70" r="0.8" fill="%2306d6a0" opacity="0.2"/><circle cx="30" cy="80" r="0.6" fill="%23118ab2" opacity="0.3"/></svg>') repeat;
+      animation: float 20s infinite linear; pointer-events:none; z-index:-1;
+    }
+    @keyframes float { 0% { transform: translateY(0px); } 100% { transform: translateY(-100px); } }
+    .wrap{max-width:1000px;margin:0 auto;padding:32px 24px;}
+    header{display:flex;align-items:center;justify-content:center;gap:16px;margin:0 0 32px;text-align:center}
+    header h1{margin:0;font-weight:900;font-size:clamp(24px,5vw,42px);background:linear-gradient(135deg,var(--primary),var(--solar-orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sun{font-size:36px;animation:pulse 2s ease-in-out infinite alternate}
+    @keyframes pulse{from{transform:scale(1);filter:drop-shadow(0 0 10px #ffd16680)}to{transform:scale(1.1);filter:drop-shadow(0 0 20px #ffd166)}}
+    .card{
+      background:linear-gradient(135deg,rgba(18,23,43,.85),rgba(15,20,40,.9));
+      backdrop-filter: blur(12px); border:1px solid rgba(255,255,255,.1);
+      border-radius:var(--radius); box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.05);
+      padding:32px; position:relative; overflow:hidden;
+    }
+    .card::before{
+      content:''; position:absolute; top:0; left:0; right:0; bottom:0;
+      background:linear-gradient(135deg,rgba(255,209,102,.02),rgba(6,214,160,.02));
+      pointer-events:none;
+    }
+    .center{display:grid;place-items:center}
+    .hero-illus{
+      width:min(480px,85vw); aspect-ratio:1; border-radius:50%; margin:24px auto 32px;
+      background:
+        radial-gradient(circle at 30% 30%, #ffd166 0%, #ff9c00 25%, #ff6b35 45%, transparent 60%),
+        radial-gradient(circle at 70% 40%, rgba(255,255,255,.2) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(255,209,102,.15) 0%, transparent 80%);
+      box-shadow:
+        0 0 80px rgba(255,207,90,.6),
+        0 0 120px rgba(255,207,90,.3),
+        inset 0 0 60px rgba(255,207,90,.4);
+      animation: solarPulse 4s ease-in-out infinite;
+      position:relative;
+    }
+    .hero-illus::after{
+      content:''; position:absolute; top:10%; left:10%; width:20%; height:20%;
+      background:radial-gradient(circle,rgba(255,255,255,.6),transparent 70%);
+      border-radius:50%; animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes solarPulse{0%,100%{transform:scale(1);box-shadow:0 0 80px rgba(255,207,90,.6),0 0 120px rgba(255,207,90,.3)}50%{transform:scale(1.05);box-shadow:0 0 100px rgba(255,207,90,.8),0 0 150px rgba(255,207,90,.4)}}
+    @keyframes shimmer{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:.7;transform:scale(1.2)}}
+    .btn{
+      appearance:none;border:0;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px;
+      padding:14px 24px;border-radius:16px;font-weight:700;font-size:15px;
+      color:#1a1f3a;background:linear-gradient(135deg,var(--primary),#ffb627);
+      transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;
+      box-shadow:0 8px 25px rgba(255,209,102,.35),0 3px 12px rgba(0,0,0,.15);
+      text-shadow:0 1px 2px rgba(0,0,0,.1);
+    }
+    .btn-icon{font-size:16px;transition:transform .3s ease}
+    .btn:hover .btn-icon{transform:scale(1.2) rotate(5deg)}
+    .btn::before{
+      content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+      transition:left .6s;z-index:1;
+    }
+    .btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 12px 35px rgba(255,209,102,.45),0 5px 15px rgba(0,0,0,.2)}
+    .btn:hover::before{left:100%}
+    .btn:active{transform:translateY(-1px) scale(.98)}
+    .btn.secondary{background:linear-gradient(135deg,var(--secondary),#00c896);color:#1a1f3a;box-shadow:0 8px 25px rgba(6,214,160,.35),0 3px 12px rgba(0,0,0,.15)}
+    .btn.secondary:hover{box-shadow:0 12px 35px rgba(6,214,160,.45),0 5px 15px rgba(0,0,0,.2)}
+    .btn.ghost{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02));color:var(--text);border:1px solid rgba(255,255,255,.2);box-shadow:0 8px 25px rgba(0,0,0,.1)}
+    .btn.ghost:hover{background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.05));border-color:rgba(255,255,255,.3);box-shadow:0 12px 35px rgba(0,0,0,.15)}
+    .row{display:flex;flex-wrap:wrap;gap:12px}
+    .row.center{justify-content:center}
+    .page{
+      display:none; animation:fade .28s ease;
+    }
+    .page.active{display:block}
+    @keyframes fade{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:translateY(0)}}
+    .story-img{
+      width:min(480px,85vw); aspect-ratio:16/10; border-radius:18px; object-fit:cover;
+      background:linear-gradient(135deg,#1a2346,#0f1524);
+      border:1px solid rgba(255,255,255,.1); box-shadow:var(--shadow),0 0 30px rgba(255,209,102,.1);
+      margin:20px auto 24px; transition:transform .3s ease,box-shadow .3s ease;
+    }
+    .story-img:hover{transform:scale(1.02);box-shadow:var(--shadow),0 0 40px rgba(255,209,102,.2)}
+    .title{font-size:clamp(22px,4vw,32px);font-weight:900;margin:8px 0 16px;background:linear-gradient(135deg,var(--primary),var(--aurora-green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .lead{font-size:clamp(17px,2.6vw,20px);color:#e9eef7;line-height:1.7;margin:16px 0}
+    .controls{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;justify-content:center}
+    .pill{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:999px;background:linear-gradient(135deg,rgba(14,20,48,.8),rgba(18,25,52,.9));border:1px solid rgba(255,255,255,.12);color:#c2d0e8;font-weight:600;box-shadow:0 4px 15px rgba(0,0,0,.2)}
+    /* Enhanced Modals */
+    dialog{
+      border:1px solid rgba(255,255,255,.15); border-radius:24px; padding:0;
+      background:linear-gradient(135deg,rgba(15,18,40,.95),rgba(20,25,50,.98));
+      color:var(--text); width:min(750px,92vw); max-height:85vh; overflow-y:auto;
+      box-shadow:0 25px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.05);
+      backdrop-filter:blur(20px);
+    }
+    dialog::backdrop{background:rgba(0,0,15,.7); backdrop-filter: blur(8px)}
+    .modal-head{padding:24px 28px;border-bottom:1px solid rgba(255,255,255,.12); display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,rgba(255,209,102,.08),rgba(6,214,160,.05))}
+    .modal-head strong{font-size:20px;font-weight:800}
+    .modal-body{padding:28px;}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:linear-gradient(135deg,rgba(14,21,52,.9),rgba(18,25,58,.95));color:#d4e2f7;border:1px solid rgba(255,255,255,.1);font-size:13px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+    .chip::before{content:'🛰';font-size:12px}
+    .close{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:18px;cursor:pointer;border-radius:12px;padding:8px 12px;transition:all .2s ease}
+    .close:hover{background:rgba(255,255,255,.2);transform:scale(1.1)}
+    .data-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:20px}
+    .data-card{background:linear-gradient(135deg,rgba(13,19,48,.8),rgba(16,23,52,.9));border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:20px;transition:all .3s ease;position:relative;overflow:hidden}
+    .data-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--aurora-green),var(--accent))}
+    .data-card:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.3),0 0 20px rgba(255,209,102,.1)}
+    .data-card .data-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+    .data-card .data-value{font-size:16px;font-weight:700;color:var(--text);word-break:break-word}
+    .muted{color:#9fb0c9}
+    .nasa-status{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:16px}
+    .nasa-status.loading{background:rgba(255,209,102,.15);color:var(--primary);border:1px solid rgba(255,209,102,.3)}
+    .nasa-status.success{background:rgba(6,214,160,.15);color:var(--secondary);border:1px solid rgba(6,214,160,.3)}
+    .nasa-status.error{background:rgba(239,71,111,.15);color:var(--danger);border:1px solid rgba(239,71,111,.3)}
+    .nasa-status::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor;animation:pulse-dot 1.5s infinite}
+    @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+    /* Enhanced Quiz */
+    .quiz-option{
+      display:block;width:100%;text-align:left;font-family:inherit;font-size:16px;font-weight:600;
+      background:linear-gradient(135deg,rgba(14,20,48,.6),rgba(18,25,52,.8));
+      color:#dfe7ff;border:1px solid rgba(255,255,255,.12);
+      padding:16px 20px;border-radius:16px;margin:12px 0;cursor:pointer;
+      transition:all .25s ease;position:relative;overflow:hidden;
+    }
+    .quiz-option::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:transparent;transition:background .3s ease}
+    .quiz-option:hover{background:linear-gradient(135deg,rgba(14,20,48,.8),rgba(18,25,52,.95));transform:translateX(4px);border-color:rgba(255,255,255,.2)}
+    .quiz-option:hover::before{background:linear-gradient(180deg,var(--primary),var(--aurora-green))}
+    .quiz-option.selected{background:linear-gradient(135deg,rgba(255,209,102,.1),rgba(6,214,160,.05));border-color:rgba(255,209,102,.3)}
+    .quiz-option.correct{background:linear-gradient(135deg,rgba(6,214,160,.2),rgba(6,214,160,.1));border:2px solid var(--aurora-green);color:#fff}
+    .quiz-option.correct::before{background:var(--aurora-green)}
+    .quiz-option.wrong{background:linear-gradient(135deg,rgba(239,71,111,.2),rgba(239,71,111,.1));border:2px solid var(--danger);color:#fff}
+    .quiz-option.wrong::before{background:var(--danger)}
+    .apod{
+      width:100%;max-height:450px;object-fit:contain;border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);background:linear-gradient(135deg,#0c112a,#151b35);
+      box-shadow:0 12px 40px rgba(0,0,0,.4),0 0 30px rgba(255,209,102,.1);
+      transition:transform .3s ease,box-shadow .3s ease;
+    }
+    .apod:hover{transform:scale(1.02);box-shadow:0 16px 50px rgba(0,0,0,.5),0 0 40px rgba(255,209,102,.15)}
+    footer{margin:28px 0 8px;color:var(--muted);font-size:13px;text-align:center}
+    .loading-spinner{display:inline-block;width:20px;height:20px;border:2px solid rgba(255,209,102,.3);border-radius:50%;border-top-color:var(--primary);animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    @media (max-width:768px){
+      .data-grid{grid-template-columns:1fr}
+      .controls{justify-content:center}
+      .btn{padding:12px 20px;font-size:14px}
+      .modal-body{padding:20px}
+      .story-img{width:min(400px,90vw)}
+    }
+    @media (max-width:480px){
+      header h1{font-size:clamp(20px,6vw,28px)}
+      .hero-illus{width:min(320px,85vw)}
+      .controls{gap:8px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header aria-label="App header">
+      <div class="sun" aria-hidden="true">🌞</div>
+      <h1>Stellar Stories — Sunny's Space Adventure</h1>
+    </header>
+
+    <!-- HOME -->
+    <section id="home" class="page active">
+      <div class="card center">
+        <div class="hero-illus" role="img" aria-label="Cartoon sun illustration"></div>
+        <p class="lead" style="text-align:center;max-width:60ch">
+          Learn about <strong>space weather</strong> (solar flares, CMEs, auroras) through a friendly story. Made better with real NASA data!
+        </p>
+        <div class="row center" style="margin:14px 0 4px">
+          <button class="btn" id="startBtn" aria-label="Start story">
+            <span class="btn-icon">▶</span> Start Your Space Journey
+          </button>
+          <button class="btn secondary" id="liveBtn" aria-label="Open NASA live data">
+            <span class="btn-icon">🛰</span> NASA Live Data
+          </button>
+          <button class="btn ghost" id="aboutBtn" aria-label="About space weather">
+            <span class="btn-icon">ℹ</span> About Space Weather
+          </button>
+        </div>
+        <div class="pill" style="margin-top:14px">Tip: turn on your volume for narration 🔊</div>
+      </div>
+    </section>
+
+    <!-- STORY -->
+    <section id="story" class="page">
+      <div class="card">
+        <div class="title" id="storyTitle">Meet Sunny 🌞</div>
+        <img id="storyImg" class="story-img" alt="Story illustration" />
+        <p id="storyText" class="lead"></p>
+
+        <div class="controls">
+          <button class="btn ghost" id="backBtn" aria-label="Go to previous page">⬅ Back</button>
+          <button class="btn" id="nextBtn" aria-label="Go to next page">➡ Next</button>
+          <button class="btn secondary" id="narrateBtn" aria-label="Play or pause narration">🔊 Play Narration</button>
+          <button class="btn ghost" id="factBtn" aria-label="Open NASA fun fact">💡 Fun Fact</button>
+        </div>
+        <div class="pill" id="pagePill" style="margin-top:10px">Page 1 / 4</div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz" class="page">
+      <div class="card">
+        <div class="title">Quiz Time!</div>
+        <p id="quizQuestion" class="lead"></p>
+        <div id="quizOptions"></div>
+        <div class="row">
+          <button class="btn" id="submitQuiz">✅ Submit Answer</button>
+          <button class="btn ghost" id="nextQuiz">➡ Next Question</button>
+        </div>
+        <p id="quizFeedback" class="lead" style="min-height:32px;margin-top:8px"></p>
+      </div>
+    </section>
+
+    <!-- ENDING -->
+    <section id="ending" class="page">
+      <div class="card center">
+        <div class="title">🌌 The End</div>
+        <img id="apodImg" class="apod" alt="NASA Astronomy Picture of the Day" />
+        <p class="lead" id="apodCaption" style="margin-top:10px;text-align:center"></p>
+        <div class="row center" style="margin-top:10px">
+          <button class="btn" id="replayBtn">🔁 Replay Story</button>
+          <button class="btn secondary" id="apodBtn">📷 Load NASA Image of the Day</button>
+          <button class="btn ghost" id="homeBtn">🏠 Home</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>Built for learning — uses NASA Open APIs (DONKI & APOD). Replace API key in source.</footer>
+  </div>
+
+  <!-- FUN FACT MODAL -->
+  <dialog id="factModal" aria-labelledby="factTitle" aria-modal="true">
+    <div class="modal-head">
+      <div>
+        <strong id="factTitle">💡 Did You Know?</strong>
+        <span class="chip" id="factChip">CME</span>
+      </div>
+      <button class="close" id="closeFact" aria-label="Close fun fact">✖</button>
+    </div>
+    <div class="modal-body">
+      <p id="factText" class="lead"></p>
+      <div class="data-grid" id="factGrid"></div>
+    </div>
+  </dialog>
+
+  <!-- NASA LIVE MODAL -->
+  <dialog id="liveModal" aria-labelledby="liveTitle" aria-modal="true">
+    <div class="modal-head">
+      <strong id="liveTitle">🛰 NASA Space Weather Updates</strong>
+      <button class="close" id="closeLive" aria-label="Close live data">✖</button>
+    </div>
+    <div class="modal-body">
+      <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span class="muted">Latest CMEs from DONKI (past ~14 days)</span>
+        <button class="btn ghost" id="refreshLive">🔄 Refresh</button>
+      </div>
+      <div id="liveList" class="data-grid"></div>
+    </div>
+  </dialog>
+
+  <!-- ABOUT MODAL -->
+  <dialog id="aboutModal" aria-labelledby="aboutTitle" aria-modal="true">
+    <div class="modal-head">
+      <strong id="aboutTitle">ℹ About Space Weather</strong>
+      <button class="close" id="closeAbout" aria-label="Close about">✖</button>
+    </div>
+    <div class="modal-body">
+      <p class="lead">Space weather is like storms in space: bursts from the Sun (solar flares & CMEs) send charged particles toward Earth. They can create beautiful auroras — and sometimes disturb radio, GPS, and power grids.</p>
+    </div>
+  </dialog>
+
+  <script>
+    // ------------------------------
+    // CONFIG & ENHANCED STATE
+    // ------------------------------
+    const NASA_KEY = "9FVBcpihm1Pc0cGSZsBWzR0g1Bk988yZQVRUgsfe"; // Your NASA API key
+    const API_CACHE = new Map();
+    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+    let currentAudio = null;
+
+    // ------------------------------
+    // STATE: Story & Quiz content
+    // ------------------------------
+    const story = [
+      {
+        title:"Meet Sunny 🌞",
+        text:"Hi! I'm Sunny the Solar Flare. I burst out of the Sun with lots of energy! Let's see where I go.",
+        img:"https://images-assets.nasa.gov/image/PIA03149/PIA03149~orig.jpg"
+      },
+      {
+        title:"What is Space Weather?",
+        text:"Space weather is like storms in space. It can shake Earth's magnetic field and affect satellites and radio.",
+        img:"https://images-assets.nasa.gov/image/PIA03153/PIA03153~orig.jpg"
+      },
+      {
+        title:"Auroras 🌌",
+        text:"When charged particles meet Earth's atmosphere near the poles, they paint the sky with colorful auroras.",
+        img:"https://images-assets.nasa.gov/image/iss041e080102/iss041e080102~orig.jpg"
+      },
+      {
+        title:"Staying Safe",
+        text:"Scientists watch the Sun with spacecraft and give alerts so pilots, astronauts, and engineers can prepare.",
+        img:"https://images-assets.nasa.gov/image/PIA03163/PIA03163~orig.jpg"
+      }
+    ];
+    const quiz = [
+      {
+        q:"What causes auroras?",
+        options:["Moonlight reflected on clouds","Solar wind colliding with the atmosphere","Volcano dust"],
+        correct:1
+      },
+      {
+        q:"Which event can disturb GPS and radio?",
+        options:["Solar flare / CME","Rainstorm","Tides"],
+        correct:0
+      }
+    ];
+
+    // ------------------------------
+    // DOM references
+    // ------------------------------
+    const pages = {
+      home: document.getElementById("home"),
+      story: document.getElementById("story"),
+      quiz: document.getElementById("quiz"),
+      ending: document.getElementById("ending")
+    };
+    const storyTitle = document.getElementById("storyTitle");
+    const storyImg = document.getElementById("storyImg");
+    const storyText = document.getElementById("storyText");
+    const pagePill = document.getElementById("pagePill");
+
+    const narrateBtn = document.getElementById("narrateBtn");
+    const backBtn = document.getElementById("backBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const factBtn = document.getElementById("factBtn");
+
+    const startBtn = document.getElementById("startBtn");
+    const replayBtn = document.getElementById("replayBtn");
+    const homeBtn = document.getElementById("homeBtn");
+    const apodBtn = document.getElementById("apodBtn");
+    const apodImg = document.getElementById("apodImg");
+    const apodCaption = document.getElementById("apodCaption");
+
+    // Modals
+    const factModal = document.getElementById("factModal");
+    const closeFact = document.getElementById("closeFact");
+    const factText = document.getElementById("factText");
+    const factGrid = document.getElementById("factGrid");
+
+    const liveModal = document.getElementById("liveModal");
+    const closeLive = document.getElementById("closeLive");
+    const liveBtn = document.getElementById("liveBtn");
+    const refreshLive = document.getElementById("refreshLive");
+    const liveList = document.getElementById("liveList");
+
+    const aboutModal = document.getElementById("aboutModal");
+    const aboutBtn = document.getElementById("aboutBtn");
+    const closeAbout = document.getElementById("closeAbout");
+
+    // Quiz
+    const quizQuestion = document.getElementById("quizQuestion");
+    const quizOptions = document.getElementById("quizOptions");
+    const submitQuiz = document.getElementById("submitQuiz");
+    const nextQuiz = document.getElementById("nextQuiz");
+    const quizFeedback = document.getElementById("quizFeedback");
+
+    // ------------------------------
+    // Navigation helpers
+    // ------------------------------
+    let storyIndex = 0;
+    let quizIndex = 0;
+    let selectedOption = null;
+    let speaking = false;
+    function showPage(id){
+      Object.values(pages).forEach(p=>p.classList.remove("active"));
+      pages[id].classList.add("active");
+    }
+    function renderStory(){
+      const s = story[storyIndex];
+      storyTitle.textContent = s.title;
+      storyText.textContent = s.text;
+      storyImg.src = s.img;
+      storyImg.alt = s.title;
+      pagePill.textContent = `Page ${storyIndex+1} / ${story.length}`;
+      backBtn.disabled = storyIndex===0;
+      nextBtn.textContent = (storyIndex===story.length-1) ? "➡ Quiz" : "➡ Next";
+    }
+
+    // ------------------------------
+    // Narration (Web Speech API)
+    // ------------------------------
+    function speak(text){
+      if(!("speechSynthesis" in window)) { alert("Speech not supported on this browser."); return; }
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "en-US";
+      utter.rate = 1; utter.pitch = 1;
+      speaking = true; narrateBtn.textContent = "⏸ Pause";
+      utter.onend = ()=>{ speaking=false; narrateBtn.textContent="🔊 Play Narration"; };
+      window.speechSynthesis.speak(utter);
+    }
+    function pauseSpeak(){
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel(); speaking=false;
+        narrateBtn.textContent="🔊 Play Narration";
+      }
+    }
+
+    // ------------------------------
+    // NASA: DONKI CME (Fun fact + Live)
+    // ------------------------------
+    function dateISOoffset(days){
+      const d = new Date(); d.setDate(d.getDate()+days);
+      return d.toISOString().slice(0,10);
+    }
+    async function fetchCMEs(daysBack=14){
+      const start = dateISOoffset(-daysBack);
+      const end = dateISOoffset(0);
+      const url = `https://api.nasa.gov/DONKI/CME?startDate=${start}&endDate=${end}&api_key=${NASA_KEY}`;
+      const res = await fetch(url);
+      if(!res.ok) throw new Error("NASA DONKI request failed");
+      return await res.json();
+    }
+    async function openFunFact(){
+      try{
+        factText.textContent = "Loading real CME data from NASA…";
+        factGrid.innerHTML = "";
+        factModal.showModal();
+        const data = await fetchCMEs(21);
+        if(!data.length){ factText.textContent="No CME events found in the recent window."; return; }
+        // Pick the latest item with speed if available
+        // Enhanced fact display with latest CME
+        const item = data.find(d => d.speed && d.speed > 300) || data[0];
+        const when = new Date(item.startTime).toLocaleDateString('en-US', {
+          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        });
+        const speed = item.speed ? `${item.speed.toLocaleString()} km/s` : "Unknown";
+        const severity = item.speed > 1000 ? "High" : item.speed > 500 ? "Medium" : "Low";
+
+        factText.innerHTML = `
+          <div class="nasa-status success">🛰 Live NASA Data</div>
+          <strong>Recent Coronal Mass Ejection detected!</strong><br>
+          On ${when}, NASA's DONKI system observed a CME traveling at ${speed}.
+          ${item.speed > 800 ? ' This was a significant space weather event!' : ' This represents typical solar activity.'}
+        `;
+
+        const fields = [
+          ["Event Date", when],
+          ["Velocity", speed],
+          ["Severity Level", severity],
+          ["Source Region", item.sourceLocation || "Solar Corona"],
+          ["Detection Method", "SOHO/STEREO Spacecraft"],
+          ["Impact Forecast", item.speed > 600 ? "Possible aurora activity" : "Minimal impact expected"]
+        ];
+
+        factGrid.innerHTML = '';
+        fields.forEach(([label,value])=>{
+          const card = document.createElement("div");
+          card.className = "data-card";
+          card.innerHTML = `
+            <div class="data-label">${label}</div>
+            <div class="data-value">${value}</div>
+          `;
+          factGrid.appendChild(card);
+        });
+      } catch(e){
+        factText.textContent = "Could not load NASA data. Try again.";
+        console.error(e);
+      }
+    }
+    async function openLive(){
+      liveList.innerHTML = `<div class="nasa-status loading">Loading NASA DONKI data...</div>`;
+      liveModal.showModal();
+
+      try{
+        showLoadingStatus();
+        const data = await fetchCMEs(21);
+
+        if(!data.length){
+          liveList.innerHTML = `
+            <div class="nasa-status error">No recent CME events found</div>
+            <p class="muted">NASA DONKI shows no Coronal Mass Ejections in the past 3 weeks. This indicates relatively quiet solar conditions.</p>
+          `;
+          return;
+        }
+
+        // Sort by date (newest first) and take top 6
+        const sortedData = data
+          .filter(item => item.startTime)
+          .sort((a,b) => new Date(b.startTime) - new Date(a.startTime))
+          .slice(0,6);
+
+        liveList.innerHTML = `<div class="nasa-status success">Real-time data from NASA DONKI</div>`;
+
+        sortedData.forEach((item,index)=>{
+          const card = document.createElement("div");
+          card.className = "data-card";
+          card.style.animationDelay = `${index * 100}ms`;
+
+          const date = new Date(item.startTime);
+          const timeAgo = getTimeAgo(date);
+          const speed = item.speed || 0;
+          const severity = speed > 1000 ? "🔴 Extreme" : speed > 700 ? "🟡 High" : speed > 400 ? "🟠 Moderate" : "🟢 Low";
+
+          card.innerHTML = `
+            <div class="data-label">CME Event #${index + 1}</div>
+            <div class="data-value" style="margin-bottom:12px">${timeAgo}</div>
+            <div class="data-label">Velocity</div>
+            <div class="data-value">${speed ? `${speed.toLocaleString()} km/s` : "Unknown"}</div>
+            <div class="data-label">Severity</div>
+            <div class="data-value">${severity}</div>
+            <div class="data-label">Source</div>
+            <div class="data-value">${item.sourceLocation || "Solar Corona"}</div>
+          `;
+          liveList.appendChild(card);
+        });
+
+      } catch(e){
+        liveList.innerHTML = `
+          <div class="nasa-status error">Failed to load NASA data</div>
+          <p class="muted">Unable to connect to NASA DONKI API. Please check your internet connection or try again later.</p>
+        `;
+        console.error('NASA API Error:', e);
+      }
+    }
+
+    function showLoadingStatus(){
+      const status = document.querySelector('.nasa-status.loading');
+      if(status) {
+        status.innerHTML = '<span class="loading-spinner"></span> Connecting to NASA satellites...';
+      }
+    }
+
+    function getTimeAgo(date) {
+      const now = new Date();
+      const diffTime = Math.abs(now - date);
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+
+      if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+      if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+      return 'Recent';
+    }
+
+    // ------------------------------
+    // NASA: APOD (Ending page)
+    // ------------------------------
+    async function loadAPOD(){
+      apodCaption.textContent = "Loading NASA Astronomy Picture of the Day…";
+      apodImg.removeAttribute("src");
+      try{
+        const url = `https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}`;
+        const res = await fetch(url);
+        if(!res.ok) throw new Error("APOD request failed");
+        const data = await res.json();
+        if (data.media_type === "image") {
+          apodImg.src = data.url;
+        } else {
+          apodImg.alt = "APOD is a video today. Open the NASA page to view.";
+        }
+        apodCaption.textContent = `${data.title} — ${data.date}`;
+      } catch(e){
+        apodCaption.textContent = "Failed to load APOD.";
+        console.error(e);
+      }
+    }
+
+    // ------------------------------
+    // QUIZ logic
+    // ------------------------------
+    function renderQuiz(){
+      const item = quiz[quizIndex];
+      quizQuestion.textContent = item.q;
+      quizOptions.innerHTML = "";
+      selectedOption = null;
+      quizFeedback.textContent = "";
+      nextQuiz.disabled = true;
+      item.options.forEach((opt,idx)=>{
+        const btn = document.createElement("button");
+        btn.className="quiz-option";
+        btn.setAttribute("type","button");
+        btn.textContent = `(${String.fromCharCode(65+idx)}) ${opt}`;
+        btn.addEventListener("click", ()=>{
+          if(btn.style.pointerEvents === 'none') return;
+          document.querySelectorAll(".quiz-option").forEach(b=>{
+            b.classList.remove("selected","correct","wrong");
+            b.style.transform = 'scale(1)';
+          });
+          selectedOption = idx;
+          btn.classList.add("selected");
+          btn.style.transform = 'scale(1.02)';
+          quizFeedback.textContent = '';
+        });
+        quizOptions.appendChild(btn);
+      });
+    }
+    function submitQuizAnswer(){
+      const item = quiz[quizIndex];
+      const buttons = [...document.querySelectorAll(".quiz-option")];
+      if(selectedOption===null){
+        quizFeedback.innerHTML = '<div class="nasa-status error">Please select an answer first! 🚀</div>';
+        return;
+      }
+
+      buttons.forEach((b,i)=>{
+        b.classList.remove("selected");
+        b.style.pointerEvents = 'none';
+        if(i===item.correct) {
+          b.classList.add("correct");
+          setTimeout(() => b.style.transform = 'scale(1.02)', 100);
+        }
+        else if(i===selectedOption) {
+          b.classList.add("wrong");
+          setTimeout(() => b.style.transform = 'scale(0.98)', 100);
+        }
+      });
+
+      const correct = selectedOption===item.correct;
+      const encouragement = [
+        "Outstanding space cadet! 🎆",
+        "Stellar knowledge! ⭐",
+        "You're a space weather expert! 🌌",
+        "NASA would be proud! 🚀"
+      ];
+      const hints = [
+        "Think about what causes those beautiful northern lights! 🌌",
+        "Remember, space weather can affect technology on Earth! 📡",
+        "Consider what happens when solar particles meet our atmosphere! ✨"
+      ];
+
+      quizFeedback.innerHTML = correct
+        ? `<div class="nasa-status success">${encouragement[Math.floor(Math.random() * encouragement.length)]}</div>`
+        : `<div class="nasa-status error">Not quite! ${hints[Math.floor(Math.random() * hints.length)]}</div>`;
+
+      nextQuiz.disabled = false;
+      nextQuiz.style.opacity = '1';
+      nextQuiz.style.transform = 'scale(1.05)';
+      setTimeout(() => nextQuiz.style.transform = 'scale(1)', 200);
+    }
+
+    // ------------------------------
+    // Event wiring
+    // ------------------------------
+    startBtn.addEventListener("click", ()=>{
+      showPage("story"); storyIndex=0; renderStory(); pauseSpeak();
+    });
+    backBtn.addEventListener("click", ()=>{ if(storyIndex>0){ storyIndex--; renderStory(); pauseSpeak(); }});
+    nextBtn.addEventListener("click", ()=>{
+      if(storyIndex < story.length-1){ storyIndex++; renderStory(); pauseSpeak(); }
+      else{ // go to quiz
+        showPage("quiz"); quizIndex=0; renderQuiz(); pauseSpeak();
+      }
+    });
+    narrateBtn.addEventListener("click", ()=>{
+      if(!speaking) speak(`${story[storyIndex].title}. ${story[storyIndex].text}`);
+      else pauseSpeak();
+    });
+    factBtn.addEventListener("click", openFunFact);
+    closeFact.addEventListener("click", ()=> factModal.close());
+
+    liveBtn.addEventListener("click", openLive);
+    refreshLive.addEventListener("click", openLive);
+    closeLive.addEventListener("click", ()=> liveModal.close());
+
+    aboutBtn.addEventListener("click", ()=> aboutModal.showModal());
+    closeAbout.addEventListener("click", ()=> aboutModal.close());
+
+    submitQuiz.addEventListener("click", submitQuizAnswer);
+    nextQuiz.addEventListener("click", ()=>{
+      if(quizIndex < quiz.length-1){ quizIndex++; renderQuiz(); }
+      else { showPage("ending"); pauseSpeak(); }
+    });
+
+    replayBtn.addEventListener("click", ()=>{ showPage("story"); storyIndex=0; renderStory(); });
+    homeBtn.addEventListener("click", ()=>{ showPage("home"); pauseSpeak(); });
+    apodBtn.addEventListener("click", loadAPOD);
+
+    // Initial APOD placeholder
+    apodCaption.textContent = "Click "Load NASA Image of the Day" to fetch APOD.";
+
+    // Keyboard accessibility (Esc to close modals)
+    window.addEventListener("keydown",(e)=>{
+      if(e.key==="Escape"){
+        [factModal, liveModal, aboutModal].forEach(m=>{ if(m.open) m.close(); });
+      }
+    });
+  </script>
+</body>
+</html>
