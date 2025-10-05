@@ -11,6 +11,7 @@ import InteractiveStoryPage from '@/components/pages/InteractiveStoryPage'
 import GameSelectionPage from '@/components/pages/GameSelectionPage'
 import GamePlaceholder from '@/components/pages/GamePlaceholder'
 import SolarDodgeGame from '@/components/games/SolarDodgeGame'
+import PlanetProtectorGame from '@/components/games/PlanetProtectorGame'
 import QuizPage from '@/components/pages/QuizPage'
 import ResultsPage from '@/components/pages/ResultsPage'
 import EndingPage from '@/components/pages/EndingPage'
@@ -104,7 +105,7 @@ export default function StellarStories() {
       case 'game-solar-dodge':
         return <SolarDodgeGame onNavigate={showPage} />
       case 'game-planet-shield':
-        return <GamePlaceholder onNavigate={showPage} gameTitle="Planet Protector" gameIcon="🛡️" />
+        return <PlanetProtectorGame onNavigate={showPage} />
       case 'game-aurora-collect':
         return <GamePlaceholder onNavigate={showPage} gameTitle="Aurora Collector" gameIcon="✨" />
       case 'game-satellite-save':

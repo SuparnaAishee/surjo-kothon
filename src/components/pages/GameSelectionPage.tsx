@@ -21,7 +21,7 @@ const games = [
     id: 'planet-shield',
     title: 'Planet Protector',
     icon: <Shield className="w-12 h-12" />,
-    description: 'Protect Earth from solar radiation!',
+    description: 'Protect Earth from solar radiation and meteors!',
     color: 'from-blue-500 to-cyan-500',
     difficulty: 'Medium'
   },
