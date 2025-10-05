@@ -82,8 +82,8 @@ An interactive educational web application that teaches children about space wea
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/stellar-stories.git
-   cd stellar-stories
+   git clone https://github.com/your-username/surjo-kothon.git
+   cd surjo-kothon
    ```
 
 2. **Install dependencies**

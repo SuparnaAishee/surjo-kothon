@@ -9,12 +9,12 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: '🌞 Stellar Stories: Sunny\'s Space Adventure',
+  title: '🌞 Surjo Kothon: Sunny\'s Space Adventure',
   description: 'Learn about space weather through stories and fun! Interactive educational experience with real NASA data.',
   keywords: 'NASA, space weather, education, solar flares, CME, aurora, interactive story',
   authors: [{ name: 'NASA Space Weather Education' }],
   openGraph: {
-    title: '🌞 Stellar Stories: Sunny\'s Space Adventure',
+    title: '🌞 Surjo Kothon: Sunny\'s Space Adventure',
     description: 'Interactive space weather education with real NASA data',
     type: 'website',
   },
