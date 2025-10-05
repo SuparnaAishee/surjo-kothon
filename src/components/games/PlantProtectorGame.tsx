@@ -177,18 +177,16 @@ export default function PlantProtectorGame({ onNavigate }: PlantProtectorGamePro
             else if (plant.stage === 'sprout') newStage = 'growing'
             else if (plant.stage === 'growing') {
               newStage = 'blooming'
-              // Unlock fact when plant blooms
-              if (plant.stage !== 'blooming') {
-                const unlockedFact = Math.floor(Math.random() * plantFacts.length)
-                if (!factsLearned.includes(unlockedFact)) {
-                  setFactsLearned(prev => [...prev, unlockedFact])
-                  setCurrentFact(unlockedFact)
-                  setShowFactPopup(true)
-                  setTimeout(() => setShowFactPopup(false), 6000)
-                }
-                setPlantsGrown(prev => prev + 1)
-                setScore(prev => prev + 50)
+              // Unlock fact when plant blooms (only once)
+              const unlockedFact = Math.floor(Math.random() * plantFacts.length)
+              if (!factsLearned.includes(unlockedFact)) {
+                setFactsLearned(prev => [...prev, unlockedFact])
+                setCurrentFact(unlockedFact)
+                setShowFactPopup(true)
+                setTimeout(() => setShowFactPopup(false), 6000)
               }
+              setPlantsGrown(prev => prev + 1)
+              setScore(prev => prev + 50)
             }
           }
 
